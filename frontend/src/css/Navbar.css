@@ -1,0 +1,184 @@
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  height: 50px;
+  z-index: 1000;
+  position: relative; /* Changed to relative to position the search container */
+}
+
+.navbar-name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+width: 190px;
+
+
+}
+
+.sidebar-toggle {
+  width: 20%;
+  font-size: 24px;
+  cursor: pointer;
+  /* margin-right: 14px; */
+
+}
+
+/* .navbar-title {
+  margin-left: 10px;
+  font-size: 1.5rem;
+  font-weight: bold;
+
+} */
+.navbar-title {
+  font-size: 1.5rem; /* Adjust font size */
+  margin-left: 10px;
+  font-weight: bold; /* Make it bold */
+  background: linear-gradient(90deg, #ea1902, #e28e07, #f5d903, #13b302, #08baf5, #5521ff, #da03fb);
+  /* Gradient color */
+  -webkit-background-clip: text; /* Clip the background to the text */
+  -webkit-text-fill-color: transparent; /* Make the text transparent to show the gradient */
+  background-clip: text; /* Ensure the background clips to the text */
+  text-fill-color: transparent; /* Make sure text fill is transparent */
+
+}
+
+.navbar-search {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+padding-right: 14px;
+color: rgb(101, 101, 101);
+
+  /* margin-right: 20px; */
+
+}
+
+.navbar-search svg {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Positioning the search container below the navbar */
+.search-container {
+  display: flex;
+  align-items: center;
+  position: absolute;
+justify-content:center;
+
+
+left: 0;
+  width: 100%;
+  max-width: 400px;
+   /* Full width of the navbar */
+  /* padding: 10px 20px; */
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+  z-index: 999; /* Ensures the search box stays above other content */
+}
+
+.navbar-profile {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.profile-icon {
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.profile-name {
+  font-size: 1rem;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  width: 400px;
+
+  height: 100%;
+  background-color: #343a40;
+  color: #fff;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 998;
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar-content {
+  padding: 20px;
+}
+
+/* Responsive Styles */
+@media (min-width:1024px)
+{
+  .search-container {
+    display: flex;
+    align-items: center;
+    position:relative;
+  justify-content:center;
+  
+
+    width: 100%;
+    max-width: 600px;
+  }
+}
+@media (max-width:1024px)
+{
+  .search-container {
+    position: relative;
+  max-width: 400px;
+  }
+}
+@media (max-width: 768px) {
+  .navbar-title {
+    font-size: 1.2rem;
+  }
+
+  .navbar-search {
+    margin-right: 10px;
+  }
+
+  .navbar-profile .profile-name {
+    display: none; /* Hide profile name for smaller screens */
+  }
+
+  .sidebar {
+    width: 300px;
+  }
+  .search-container {
+position: absolute;
+left: 0;
+    width: 100%;
+    max-width: 100%;
+   
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 10px 15px;
+  }
+
+  .navbar-title {
+    font-size: 1rem;
+  }
+
+  .navbar-search {
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
+  .sidebar {
+    width: 200px;
+  }
+}
