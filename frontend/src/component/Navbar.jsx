@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../css/Navbar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faBars, faTimes, faSearch } from '@fortawesome/free-solid-svg-icons';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 import Search from './Search'; // Assuming the Search component is properly imported
@@ -38,16 +38,16 @@ const NavBar = () => {
     }
   };
 
-  // Track window resizing
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+    // Track window resizing
+    useEffect(() => {
+      const handleResize = () => {
+        setWindowWidth(window.innerWidth);
+      };
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, []);
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -60,24 +60,44 @@ const NavBar = () => {
     <>
       <nav className="navbar">
         <div className="navbar-name">
-        { isSidebarOpen? <FontAwesomeIcon icon={faTimes} className="sidebar-toggle" onClick={toggleSidebar} />
-         : <FontAwesomeIcon icon={faBars } className="sidebar-toggle" onClick={toggleSidebar} />
-}
+          {isSidebarOpen ? (
+            <FontAwesomeIcon icon={faTimes} className="sidebar-toggle" onClick={toggleSidebar} />
+          ) : (
+            <FontAwesomeIcon icon={faBars} className="sidebar-toggle" onClick={toggleSidebar} />
+          )}
           <div className="navbar-title">Smart Notes</div>
         </div>
-        <div className="navbar-search">
-          <input type="text" placeholder="Search..." />
-          <button type="button">Search</button>
-        </div>
+
+             {/* Conditionally render search based on screen width */}
+             {windowWidth > 1024 ? (
+          <div className="search-container" ref={searchRef}>
+            <Search />
+          </div>
+        ) : (
+          <>
+            {!isSearchOpen ? (
+              <div className="navbar-search">
+                <FontAwesomeIcon icon={faSearch}  onClick={() => setSearchOpen(!isSearchOpen)} />
+              </div>
+            ) : (
+              <div className="search-container" ref={searchRef}>
+                <Search />
+              </div>
+            )}
+          </>
+        )}
+
         <div className="navbar-profile">
-          <FontAwesomeIcon icon={faUser} className="profile-icon" />
+          <FontAwesomeIcon icon={faUser} className="profile-icon" onClick={handleProfile} />
           <span className="profile-name">User Name</span>
         </div>
       </nav>
+
+     
+
       <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`} ref={sidebarRef}>
+        <Sidebar />
       
-      <Sidebar/>
-       
       </div>
     </>
   );

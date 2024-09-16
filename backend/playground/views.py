@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import User
+from .models import User, Folder, File
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import api_view, permission_classes
@@ -86,13 +86,19 @@ def login(request):
         return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
     
+import logging
+
+logger = logging.getLogger(__name__)
+
 @csrf_exempt
 @api_view(['POST'])
-@permission_classes([AllowAny])  # You can adjust the permissions as needed
+@permission_classes([AllowAny])
 def create_folder_file(request):
     """
     Handle the creation of a folder and a file inside that folder for a user.
     """
+    logger.info(f"Request data: {request.data}")  # Add this line to log request data
+
     username = request.data.get('username')
     folder_name = request.data.get('folder_name')
     file_name = request.data.get('file_name')
@@ -132,3 +138,53 @@ def create_folder_file(request):
 
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# @api_view(['GET'])
+# def list_folders(request):
+#     """
+#     API view to return a list of all folder names.
+#     """
+#     folders = Folder.objects.values_list('name', flat=True)  # Get all folder names
+#     return Response(folders)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_user_folders(request):
+    try:
+        # Get the username from query parameters
+        username = request.query_params.get('username')
+        if not username:
+            return Response({"error": "Username is required as a query parameter"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Fetch the user by username
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Get all folders for the user
+        folders = user.folders.all()
+        
+        # Prepare folder data
+        folder_data = []
+        for folder in folders:
+            # Get all files in each folder
+            files = folder.files.all()
+            file_data = [{"name": file.name, "content": file.content} for file in files]
+            folder_data.append({
+                "folder_name": folder.name,
+                "files": file_data
+            })
+        
+        # Prepare the response data
+        response_data = {
+            "username": user.username,
+            "folders": folder_data
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        # Log the error (in production, use proper logging)
+        print(f"Error fetching user folders: {str(e)}")
+        return Response({"error": f"Error fetching user folders: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

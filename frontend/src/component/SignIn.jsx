@@ -23,16 +23,18 @@ const SignIn = () => {
     e.preventDefault();
 
     try {
-      const response = await axiosInstance.post('/api/login/', form);
+      const response = await axiosInstance.post('/login/', form);
       if (response.status === 200) {
         const token = response.data.access;
         localStorage.setItem('authToken', token);
+        localStorage.setItem('username', form.username);
         alert(response.data.message); // Adjust this to your needs
         console.log("Login successful", response.data);
         navigate('/home');
     }
      
     } catch (error) {
+      alert('Error: Something went wrong');
       console.error("Login failed", error);
     }
   };

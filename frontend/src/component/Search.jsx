@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { faUser, faBars, faTimes, faSearch } from '@fortawesome/free-solid-svg-icons';
 import '../css/Search.css';
+import { useAllData } from '../context/AllDataCOntext';
 
 export default function Search() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -11,7 +12,12 @@ export default function Search() {
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   // Example suggestions, replace with actual data or API call
-  const suggestions = ['React', 'JavaScript', 'Node.js', 'YouTube Search', 'CSS Tricks'];
+  // const suggestions = ['React', 'JavaScript', 'Node.js', 'YouTube Search', 'CSS Tricks'];
+  const {files }= useAllData();
+  console.log("search ",files);
+  
+ const suggestions = files.map(file=> file.name);
+console.log("s",suggestions);
 
   const searchInputRef = useRef(null);
   const suggestionListRef = useRef(null);
